@@ -1,3 +1,4 @@
+# main.tf has been modified so that it can be run by spacelift.
 resource "aws_vpc" "mtc_vpc" {
   cidr_block           = "10.123.0.0/16"
   enable_dns_hostnames = true
