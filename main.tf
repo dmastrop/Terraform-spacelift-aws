@@ -67,7 +67,9 @@ resource "aws_security_group" "mtc_sg" {
 
 resource "aws_key_pair" "mtc_auth" {
   key_name   = "mtckey2"
-  public_key = file("~/.ssh/mtckey.pub")
+  #public_key = file("~/.ssh/mtckey.pub")
+  public_key = file("mtckey.pub")
+  # the mtckey.pub has been moved to local folder for spacelift
 }
 
 resource "aws_instance" "dev_node" {
@@ -77,6 +79,7 @@ resource "aws_instance" "dev_node" {
     vpc_security_group_ids = [aws_security_group.mtc_sg.id]
     subnet_id = aws_subnet.mtc_public_subnet.id
     user_data = file("userdata.tpl")
+    # userdata.tpl is already in local file so spacelift will be ok with this.
 
     root_block_device {
         volume_size = 10
@@ -86,11 +89,12 @@ resource "aws_instance" "dev_node" {
         Name = "dev-node"
     }
 
-  provisioner "local-exec" {
-    command = templatefile("${var.host_os}-ssh-config.tpl", {
-      hostname = self.public_ip,
-      user     = "ubuntu",
-    identityfile = "~/.ssh/mtckey" })
-    interpreter = var.host_os == "windows" ? ["Powershell", "-Command"] : ["bash", "-c"]
-  }
+  #provisioner "local-exec" {
+  #  command = templatefile("${var.host_os}-ssh-config.tpl", {
+  #    hostname = self.public_ip,
+  #    user     = "ubuntu",
+  #  identityfile = "~/.ssh/mtckey" })
+  #  interpreter = var.host_os == "windows" ? ["Powershell", "-Command"] : ["bash", "-c"]
+  #}
+
 }
