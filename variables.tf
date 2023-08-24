@@ -7,3 +7,7 @@ variable "host_os" {
 variable "aws_region" {
 	type = string
 }
+
+variable "aws_availability_zone" {
+	type = string
+}
