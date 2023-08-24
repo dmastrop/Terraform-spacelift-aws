@@ -13,6 +13,11 @@ resource "aws_subnet" "mtc_public_subnet" {
   vpc_id                  = aws_vpc.mtc_vpc.id
   cidr_block              = "10.123.1.0/24"
   map_public_ip_on_launch = true
+  # my addition for variable on aws_availability_zone based upon 
+  # the spacelift linux vs. windows context (host_os)
+  # see also variables.tf. The relevant contexts in spacelift have been updated
+  # with the TF_VARS_aws_availability_zone ENV variable.  Linux is us-west-2a and
+  # windows is us_east-1a
   availability_zone       = var.aws_availability_zone
 
 
