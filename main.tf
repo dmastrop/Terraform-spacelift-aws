@@ -69,8 +69,10 @@ resource "aws_security_group" "mtc_sg" {
 resource "aws_key_pair" "mtc_auth" {
   key_name   = "mtckey2"
   #public_key = file("~/.ssh/mtckey.pub")
-  public_key = file("mtckey.pub")
+  #public_key = file("mtckey.pub")
   # the mtckey.pub has been moved to local folder for spacelift
+  public_key = file("/mnt/workspace/mtckey.pub")
+  # the mtckey.pub has been moved again to the spacelift directory
 }
 
 resource "aws_instance" "dev_node" {
