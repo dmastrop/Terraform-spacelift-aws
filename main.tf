@@ -17,7 +17,7 @@ resource "aws_subnet" "mtc_public_subnet" {
   # the spacelift linux vs. windows context (host_os)
   # see also variables.tf. The relevant contexts in spacelift have been updated
   # with the TF_VARS_aws_availability_zone ENV variable.  Linux is us-west-2a and
-  # windows is us_east-1a.
+  # windows is us_east-1a...
   availability_zone       = var.aws_availability_zone
 
 
