@@ -43,7 +43,7 @@ resource "aws_subnet" "mtc_public_subnet-1" {
   # with the TF_VARS_aws_availability_zone ENV variable.  Linux is us-west-2a and
   # windows is us_east-1a. main test2.
   # availability_zone = "us-west-2a"
-  availability_zone = us-west-1a
+  availability_zone = "us-west-1a"
 
 
   tags = {
@@ -63,7 +63,7 @@ resource "aws_subnet" "mtc_public_subnet-2" {
   # with the TF_VARS_aws_availability_zone ENV variable.  Linux is us-west-2a and
   # windows is us_east-1a. main test2.
   # availability_zone = "us-west-2a"
-  availability_zone = us-east-1a
+  availability_zone = "us-east-1a"
 
 
   tags = {
