@@ -44,7 +44,7 @@ module "second-compute" {
   subnet_id         = module.networking.subnet_id
   
   host_os = "windows"
-  aws_availability_zone = "us-east-1a"
+  availability_zone = "us-east-1a"
   # this is a manual override test of the spacelift context (as noted in comments below)
   # Even though spacelift context is set at linux, this should deploy windows for the second comute
   # and first compute should continue to use linux since it's host_os = var.host_os
