@@ -43,7 +43,15 @@ module "second-compute" {
   #  and the root module will then fetch the values from output of the networking module.
   security_group_id = [module.networking.security_group_id]
 
-  subnet_id         = module.networking.subnet_id
+  subnet_id = module.networking.subnet_id-2
+  # this is a manual override test of the spacelift context TF_VAR_aws_availability_zone.
+  # Want to override the default linux spacelift context and force the second instance to windows aws_availablity_zone 
+  # of us-east-2a
+  
+  ##subnet_id         = module.networking.subnet_id
+  
+
+
   
   host_os = "windows"
   # this is a manual override test of the spacelift context (as noted in comments below)

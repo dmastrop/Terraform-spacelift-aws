@@ -30,6 +30,50 @@ resource "aws_subnet" "mtc_public_subnet" {
   }
 }
 
+
+#Experiemental subnet-1
+
+resource "aws_subnet" "mtc_public_subnet-1" {
+  vpc_id                  = aws_vpc.mtc_vpc.id
+  cidr_block              = "10.123.1.0/24"
+  map_public_ip_on_launch = true
+  # my addition for variable on aws_availability_zone based upon 
+  # the spacelift linux vs. windows context (host_os)
+  # see also variables.tf. The relevant contexts in spacelift have been updated
+  # with the TF_VARS_aws_availability_zone ENV variable.  Linux is us-west-2a and
+  # windows is us_east-1a. main test2.
+  # availability_zone = "us-west-2a"
+  availability_zone = us-west-1a
+
+
+  tags = {
+    Name = "dev-public-1"
+  }
+}
+
+#Experimental subnet-2
+
+resource "aws_subnet" "mtc_public_subnet-2" {
+  vpc_id                  = aws_vpc.mtc_vpc.id
+  cidr_block              = "10.123.2.0/24"
+  map_public_ip_on_launch = true
+  # my addition for variable on aws_availability_zone based upon 
+  # the spacelift linux vs. windows context (host_os)
+  # see also variables.tf. The relevant contexts in spacelift have been updated
+  # with the TF_VARS_aws_availability_zone ENV variable.  Linux is us-west-2a and
+  # windows is us_east-1a. main test2.
+  # availability_zone = "us-west-2a"
+  availability_zone = us-east-1a
+
+
+  tags = {
+    Name = "dev-public-2"
+  }
+}
+
+
+
+
 resource "aws_internet_gateway" "mtc_internet_gateway" {
   vpc_id = aws_vpc.mtc_vpc.id
 
