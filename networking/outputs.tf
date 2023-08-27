@@ -19,6 +19,6 @@ output "subnet_id-1" {
   value = aws_subnet.mtc_public_subnet-1.id
 }
 
-output "subnet_id-2" {
-  value = aws_subnet.mtc_public_subnet-2.id
-}
+##output "subnet_id-2" {
+  ##value = aws_subnet.mtc_public_subnet-2.id
+##}
