@@ -2,6 +2,10 @@ main branch is the modular implementation of the terraform infra deployment (com
 
 development_through_14 is the non-modular implementation on the terraform infra deployment
 
+
+
+==============
+
 Use of spacelift context for linux mac context vs. windows context.
 
 Linux context is in us-west-2a
