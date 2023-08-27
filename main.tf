@@ -43,7 +43,12 @@ module "second-compute" {
   security_group_id = [module.networking.security_group_id]
   subnet_id         = module.networking.subnet_id
   
-  host_os           = var.host_os
+  host_os = "windows"
+  # this is a manual override test of the spacelift context (as noted in comments below)
+  # Even though spacelift context is set at linux, this should deploy windows for the second comute
+  # and first compute should continue to use linux since it's host_os = var.host_os
+  
+  ##host_os           = var.host_os
   # unlike the first 2 this one has to come from the root module and into the compute module
   # host_os is not an output but a variable from the spacelift context TF_VAR_host_os
   # it is used as a variable in the compute.tf outputs.tf
