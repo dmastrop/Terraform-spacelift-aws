@@ -35,7 +35,7 @@ resource "aws_subnet" "mtc_public_subnet" {
 
 resource "aws_subnet" "mtc_public_subnet-1" {
   vpc_id                  = aws_vpc.mtc_vpc.id
-  cidr_block              = "10.123.1.0/24"
+  cidr_block              = "10.123.3.0/24"
   map_public_ip_on_launch = true
   # my addition for variable on aws_availability_zone based upon 
   # the spacelift linux vs. windows context (host_os)
