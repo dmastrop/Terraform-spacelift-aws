@@ -15,6 +15,23 @@ variable "host_os" {
   type = string
 }
 
+# The three variables below are added for the extensible compute module addtions in main
+# These varaibles are being used in the compute.tf to make it extensible for multiple aws instances
+variable "node_name" {
+  type = string
+}
+
+variable "key_name" {
+  type = string
+}
+
+variable "instance_type" {
+  type = string
+}
+
+
+
+
 
 ##NOTES:
 
@@ -23,6 +40,7 @@ variable "host_os" {
 ##vpc_security_group_ids = var.security_group_id
 # NOTE: originally this is in brackets so this is a type = list 
 # when we define this as a variable
+# the list(any)  the (any) is auto-inserted. Not sure why.
 
 #subnet_id = aws_subnet.mtc_public_subnet.id
 # we will need to create a variables.tf for this

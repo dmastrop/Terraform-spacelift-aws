@@ -1,5 +1,9 @@
 resource "aws_key_pair" "mtc_auth" {
-  key_name = "mtckey2"
+
+  key_name = var.key_name
+  # change static key_name to variable for extensible compute module changes
+
+  #key_name = "mtckey2"
   #public_key = file("~/.ssh/mtckey.pub")
   #public_key = file("mtckey.pub")
   # the mtckey.pub has been moved to local folder for spacelift
@@ -8,7 +12,12 @@ resource "aws_key_pair" "mtc_auth" {
 }
 
 resource "aws_instance" "dev_node" {
-  instance_type = "t2.micro"
+
+  instance_type = var.instance_type
+  # change static instance_type to variable for extensible compute module changes
+  # NOTE only t2.micro is in the free tier.
+
+  #instance_type = "t2.micro"
   ami           = data.aws_ami.server_ami.id
   key_name      = aws_key_pair.mtc_auth.id
   #vpc_security_group_ids = [aws_security_group.mtc_sg.id]
@@ -34,7 +43,11 @@ resource "aws_instance" "dev_node" {
   }
 
   tags = {
-    Name = "dev-node"
+
+    Name = "${var.node_name}-dev-node"
+    # change static tag of dev-node to dynamic to support extensible compute module implementation
+
+    # Name = "dev-node"
   }
 
   #provisioner "local-exec" {

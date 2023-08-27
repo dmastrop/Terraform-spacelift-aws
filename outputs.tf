@@ -7,4 +7,17 @@ output "dev_ip" {
 }
 
 # these outputs unlike the compute and the networking module
-# is visible to us.
+# are visible to us.
+
+
+# add the root outputs for the second compute instance 
+# these are derived from the **compute** outputs.tf file with the module pre-pended as below
+# the modules are "compute" for the first instance and "second-compute" for the second instance
+# see the main.tf file.
+output "second-connection_script" {
+    value = module.second-compute.connection_script
+}
+
+output "second-dev_ip" {
+    value = module.second-compute.dev_ip
+}
