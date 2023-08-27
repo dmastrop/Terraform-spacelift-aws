@@ -1,4 +1,6 @@
-main branch is the modular implementation of the terraform infra deployment (compute and networking terraform modules)
+main branch is the latest modular implementation of the terraform infra deployment (compute and networking terraform modules)
+
+development_through_18_first_modular is the first terraform modular implementation
 
 development_through_14 is the non-modular implementation on the terraform infra deployment
 
