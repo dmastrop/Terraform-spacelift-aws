@@ -6,5 +6,5 @@ output "dev_ip" {
   value = module.compute.dev_ip
 }
 
-#these outputs unlike the compute and the networking module
-#is visible to us.
+# these outputs unlike the compute and the networking module
+# is visible to us.
