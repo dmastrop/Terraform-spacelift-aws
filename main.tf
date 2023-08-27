@@ -5,6 +5,7 @@ module "networking" {
   aws_availability_zone = var.aws_availability_zone
 }
 
+
 module "compute" {
   source = "./compute"
   # need to pass in the security group id and subnet id so that i can access the 
@@ -41,10 +42,10 @@ module "second-compute" {
   # the variables.tf in compute module (folder) will look for the definition of these in this root module
   #  and the root module will then fetch the values from output of the networking module.
   security_group_id = [module.networking.security_group_id]
+
   subnet_id         = module.networking.subnet_id
   
   host_os = "windows"
-  availability_zone = "us-east-1a"
   # this is a manual override test of the spacelift context (as noted in comments below)
   # Even though spacelift context is set at linux, this should deploy windows for the second comute
   # and first compute should continue to use linux since it's host_os = var.host_os
