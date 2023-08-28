@@ -13,3 +13,8 @@ output "security_group_id" {
 output "subnet_id" {
   value = aws_subnet.mtc_public_subnet.id
 }
+
+# experimental outputs 1 and 2
+output "subnet_id-1" {
+  value = aws_subnet.mtc_public_subnet-1.id
+}
