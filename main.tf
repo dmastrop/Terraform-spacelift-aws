@@ -98,7 +98,12 @@ module "second-compute" {
   # for now we will give the following static assignments
   node_name = "second-node"
   key_name = "second-key"
-  instance_type = "t2.small"
+
+  # edit the instance_type of the second compute to t2.micro to get the spacelift policy to pass
+  # the spacelift policy denies any run if there is a single instance that is not t2.micro
+
+  instance_type = "t2.micro"
+  #instance_type = "t2.small"
 
 
 }
