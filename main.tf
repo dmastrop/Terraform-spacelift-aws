@@ -101,9 +101,11 @@ module "second-compute" {
 
   # edit the instance_type of the second compute to t2.micro to get the spacelift policy to pass
   # the spacelift policy denies any run if there is a single instance that is not t2.micro
+  # Next, changed spacelift policy to allow t2.micro OR t2.small.  Fail the policy with a t2.large here.
 
   #instance_type = "t2.micro"
-  instance_type = "t2.small"
+  #instance_type = "t2.small"
+  instance_type = "t2.large"
 
 
 }
