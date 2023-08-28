@@ -1,3 +1,5 @@
+This is the development_experimental branch. Most of the stuff here has been merged into main in some form or another. So main has the latest working implementatons of this project.  See the README.md file in main fo these integrations.....
+
 main branch is the latest modular implementation of the terraform infra deployment (compute and networking terraform modules). Three new  variables added to make multiple computes more extensible (compute variables.tf), second compute node added (compute.tf and main.tf second compute module), root outputs.tf added second compute module entry.
 
 development_through_18_first_module is the first modular implementation of terraform.
