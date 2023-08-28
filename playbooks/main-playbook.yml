@@ -1,0 +1,229 @@
+---
+#- name: Install Grafana
+- name: Bootstrap Main EC2 Node
+  # This playbook will be executed on each EC2 instance from Cloud9 using ssh into each instance
+  #hosts: hosts
+  # what we want to run the playbook on. This is a local test
+  hosts: main
+  # integrating ansible with terraform requires hosts main. Also changed aws_hosts file from 
+  # [hosts] group to [main] grouping.
+  # With this change the aws_hosts file will be specified as custom inventory file everytime we run grafana.
+  become: yes
+  # we must be root to run apt
+  
+  vars:
+    listen_address: 0.0.0.0
+    # 0.0.0.0 is localhost on ubuntu testing
+    listen_port: 9090
+    # the above 2 are for the scrape address that Prometheus will use
+    # see the prometheus.yml.j2 file.
+  
+  
+  tasks:
+  # Grafana installation
+  # we will use the main-userdata.tpl file to scaffold this (the -names below). See below
+    
+    - name: Download apt key
+    # download the apt key
+    # see this documentation: apt_module
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_key_module.html
+    # we will not need wget as in here: wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add - &&
+    # we can use a url. See documentation above
+      ansible.builtin.apt_key:
+      # note the syntax here: ansible.builtin.apt_key   That is an underscore on the last apt_key
+        url: https://packages.grafana.com/gpg.key
+        state: present
+    
+    
+    - name: Add grafana repo to sources.list
+    # add grafana to the sources.list
+    # echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list &&
+    # we have apt respository module for this, apt_repository_module
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_repository_module.html
+      #filename will set the name of the source list file in sources.list.d. Defaults to a file name based on the repository source url. The .list extension will be automatically added.
+      #repo is a source string for the repository.
+      ansible.builtin.apt_repository:
+        repo: deb https://packages.grafana.com/oss/deb stable main
+        filename: grafana
+        # this automatically appends the .list to this file
+        state: present
+    
+   
+    - name: Update apt cache and intall Grafana
+    # sudo apt-get -y update &&
+    # sudo apt-get -y install grafana &&
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+      #update_cache runs the equivalent of apt-get update before the operation. Can be run as part of the package installation or as a separate step
+      # default is to not update the cache
+      ansible.builtin.apt:
+        name: grafana
+        # this is the name of the application
+        update_cache: yes
+        
+    
+    
+    - name: Ensure Grafana is started and enabled.
+    # sudo systemctl start grafana-server &&
+    # sudo systemctl enable grafana-server.service
+    # we have a ansible.builtin.systemd_service module
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_service_module.html
+      #enabled is whether the unit should start on boot. At least one of state and enabled are required.
+      #state is started/stooped will not run unless they need to be run and will not run on themselves.
+      #ansible will always start grafana-service.  Can even use it to start if granfana-service crashes.
+        #restarted will always bounce the unit. Reloaded will always reload....
+      ansible.builtin.systemd:
+        name: grafana-server
+        #note that the service is grafana-service and not grafana.  Grafana is the application name.
+        state: started
+        enabled: yes
+        
+        
+        
+        
+        
+        
+  # Prometheus installation
+  # Use the PrometheusInstallNotes.txt to scaffold this.
+    
+    - name: Download Prometheus
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html
+      ansible.builtin.get_url:
+        url: https://github.com/prometheus/prometheus/releases/download/v2.30.3/prometheus-2.30.3.linux-amd64.tar.gz
+        dest: /home/ubuntu
+        # this is the location on the EC2 aws_instance
+    
+    
+    
+    - name: Extract Prometheus Resources using tar file
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html
+      ansible.builtin.unarchive:
+        src: /home/ubuntu/prometheus-2.30.3.linux-amd64.tar.gz
+        # recall /home/ubuntu is where the tar was downloaded to
+        dest: /home/ubuntu
+        remote_src: yes
+        # this is very important.If this is not included it assumes you are unzipping 
+        # locally (on Cloud9). We are unzipping the tar that has been downloaded into the EC2 
+        # instance in /home/ubuntu and not unzipping locally.
+        
+   
+   
+    - name: Create a Prometheus Group
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/group_module.html
+      ansible.builtin.group:
+        name: prometheus
+        state: present
+      
+  
+   
+    - name: Create a Prometheus User
+   # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
+   # add a user and put the user in a group and provide shell of /sbin/nologin
+      ansible.builtin.user:
+        name: prometheus
+        group: prometheus
+        shell: /sbin/nologin
+       #this is a service user with no provisioning for login or system access
+   
+   
+   
+    - name: Create Prometheus Directories and Files using a loop and Setting Permissions 
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
+    # https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_loops.html
+      ansible.builtin.file:
+        path: "{{ item }}"
+        # NOT " {{ item }} "
+        # moustache syntax for iterating through. We have 5 files/directories to create.
+        # item will be replaced by the loop list below. There are 5 files/directories to create
+        state: directory
+        recurse: yes
+        # allow us to set owner and group of these directories recursively
+        owner: prometheus
+        group: prometheus
+        # these will chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus
+        mode: '0775'
+        # this will chmod -R 775 /etc/prometheus/ /var/lib/prometheus/
+      loop:
+      # add all of our directories that we need to create
+      # this takes care of mkdir -p /etc/prometheus/{rules,rules.d,files_sd}  /var/lib/prometheus
+        - /etc/prometheus
+        - /etc/prometheus/rules
+        - /etc/prometheus/rules.d
+        - /etc/prometheus/files_sd
+        - /var/lib/prometheus
+     
+     
+    - name: Copy Files to /usr/local/bin
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
+    # this takes care of cp prometheus promtool /usr/local/bin/
+    # this takes care of cp -r consoles/ console_libraries/ /etc/prometheus/
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: /usr/local/bin
+        # this is where the binaries will be
+        remote_src: yes
+        # all of this is done on remote EC2 instance and NOT on Cloud9
+        mode: '0775'
+        # chmod 775 the binaries
+        owner: prometheus
+        group: prometheus
+      loop:
+      # the loop has all the source files
+      # one of them is from the directory where we unzipped the tar
+        - /home/ubuntu/prometheus-2.30.3.linux-amd64/prometheus
+        - /home/ubuntu/prometheus-2.30.3.linux-amd64/promtool
+  
+  
+  
+    - name: Copy Files to /etc/prometheus
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: /etc/prometheus
+        remote_src: yes
+        # this is all done on remote EC2 instance and not on Cloud9
+      loop:
+        - /home/ubuntu/prometheus-2.30.3.linux-amd64/consoles
+        - /home/ubuntu/prometheus-2.30.3.linux-amd64/console_libraries
+        # a trailing slash here caused files in directories to be copied over
+        # but not directories themselves.  Removed trailing slash and works as
+        # desired, but files are still in /etc/prometheus.
+   
+   
+   
+    - name: Create Config File /etc/prometheus/prometheus.yml
+    # use the ansible.builtin.template module
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html
+      ansible.builtin.template:
+        src: prometheus.yml.j2
+        # we are already in the playbooks directory so we do not need a path
+        dest: /etc/prometheus/prometheus.yml
+        # with the ansible.builtin.tempalte the destination is ALWAYS remote
+        
+
+   
+    - name: Create a Systemd File /etc/systemd/system/prometheus.service
+    # use the ansible.builtin.template module
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html
+      ansible.builtin.template:
+        src: prometheus.service.j2
+        # we are already in the playbooks directory so we do not need a path
+        dest: /etc/systemd/system/prometheus.service
+        # with the ansible.builtin.tempalte the destination is ALWAYS remote
+   
+   
+   
+    - name: Ensure Prometheus is Started systemctl start and enable
+    # systemctl start prometheus
+    # systemctl enable prometheus
+    # we have a ansible.builtin.systemd_service module
+    # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_service_module.html
+      #enabled is whether the unit should start on boot. At least one of state and enabled are required.
+      #state is started/stooped will not run unless they need to be run and will not run on themselves.
+      #ansible will always start this service.  Can even use it to start if prometheus crashes.
+        #restarted will always bounce the unit. Reloaded will always reload....
+      ansible.builtin.systemd:
+        name: prometheus
+        #note that the service is prometheus, which is the same as the application name....
+        state: started
+        enabled: yes
+    
