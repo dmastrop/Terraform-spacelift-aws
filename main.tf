@@ -93,9 +93,6 @@ module "second-compute" {
   # One can have a mixture of linux and windows host_os aws instances.
 
 
-
-
-
   #the variables below are added for the changes to compute.tf for extensiblity for multiple aws instances
   # the compute variables.tf and the compute.tf have also been modified accordingly
   # for now we will give the following static assignments
