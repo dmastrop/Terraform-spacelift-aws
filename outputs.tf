@@ -21,3 +21,11 @@ output "second-connection_script" {
 output "second-dev_ip" {
     value = module.second-compute.dev_ip
 }
+
+output "third-connection_script" {
+    value = module.third-compute.connection_script
+}
+
+output "third-dev_ip" {
+    value = module.third-compute.dev_ip
+}
