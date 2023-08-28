@@ -116,6 +116,6 @@ resource "null_resource" "grafana_install" {
   provisioner "local-exec" {
     #command = "/Users/davemastropolo/Library/Python/3.11/bin/ansible-playbook -i aws_hosts --key-file /home/ubuntu/.ssh/mtckey playbooks/grafana.yml"
     # ansible-playbook is run locally on Cloud9 but uses ssh to aws_hosts to deploy the ansible playbook on the remote aws_hosts
-    command = "ansible-playbook -i compute/aws_hosts --key-file ~/.ssh/mtckey playbooks/main-playbook.yml"
+    command = "/Users/davemastropolo/Library/Python/3.11/bin/ansible-playbook -i compute/aws_hosts --key-file ~/.ssh/mtckey playbooks/main-playbook.yml"
   }
 } 
