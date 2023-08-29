@@ -7,6 +7,7 @@ main branch is the latest modular implementation of the terraform infra deployme
 - Added third compute (same as first compute).  Second compute uses this subnet-1
 - Added policy in spacelift for allowing only deployment of t2.micro or t2.small. Tested node 2 with t2.large (denail), t2.micro and t2.small
 - Adding code for ansible integration into the compute.tf module.  Need null_resoure in compute.tf to run ansible-playbook and aws_hosts file to keep track of the public ip inventory. Deployment will be grafana and prometheus apps on all 3 nodes.  Need ec2 wait function to wait for all of the instances to be up PRIOR to engaing with ansible for the application deployment onto the the nodes!!
+- removed the ansible implementation code from development_experiemental. So it never made it into main. The running environment is spacelift and not local VSCode.  This requires more information from spacelift on ENV vars required to do this, etc....
 
 development_through_18_first_module is the first modular implementation of terraform.
 
