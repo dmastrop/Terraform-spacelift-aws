@@ -104,7 +104,7 @@ module "second-compute" {
   # Next, changed spacelift policy to allow t2.micro OR t2.small.  Fail the policy with a t2.large here.
 
   #instance_type = "t2.micro"
-  instance_type = "t2.small"
+  #instance_type = "t2.small"
   #instance_type = "t2.large"
 
 
