@@ -109,3 +109,9 @@ module "second-compute" {
 
 
 }
+
+## NOTES: if i use the windows-dev-east context on spacelift then the aws_region is us-east-1 and
+## the aws_availiablity_zone for compute instance2 must be in that region (i.e. subnet-1 must be changed
+to us-east-1a, etc. See networking.tf file)
+## Otherwise the script will fail because you cannot create compute instances that do not have aws_availiablity_zone
+## in the specified aws_region. Leaving compute instance2 in us-west-2c will fail.

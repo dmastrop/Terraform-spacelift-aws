@@ -31,7 +31,7 @@ resource "aws_subnet" "mtc_public_subnet" {
 }
 
 
-#Experiemental subnet-1
+#Experimental subnet-1
 
 resource "aws_subnet" "mtc_public_subnet-1" {
   vpc_id                  = aws_vpc.mtc_vpc.id
@@ -41,7 +41,7 @@ resource "aws_subnet" "mtc_public_subnet-1" {
   # the spacelift linux vs. windows context (host_os)
   # see also variables.tf. The relevant contexts in spacelift have been updated
   # with the TF_VARS_aws_availability_zone ENV variable.  Linux is us-west-2a and
-  # windows is us_east-1a. main test2.
+  # windows is us-west-2b.
   # availability_zone = "us-west-2a"
   availability_zone = "us-west-2c"
 
