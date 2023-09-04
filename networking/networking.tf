@@ -43,12 +43,17 @@ resource "aws_subnet" "mtc_public_subnet-1" {
   # with the TF_VARS_aws_availability_zone ENV variable.  Linux is us-west-2a and
   # windows is us-west-2b.
   # availability_zone = "us-west-2a"
-  #availability_zone = "us-west-2c"
+  # availability_zone = "us-west-2c"
 
   # the us-east-1a zone must be used if the spacelift context is switched to windows-dev-east
   # because the aws_region is in us-east-1. You cannot create compute instances on aws_avaialbity_zones
   # that do not reside in the aws_region.  See main.tf as well.
-  availability_zone = "us-east-1a"
+  # availability_zone = "us-east-1a"
+  availability_zone = "us-east-1b"
+  # availability_zone = "us-east-1c"
+  # availability_zone = "us-east-1d"
+  # availability_zone = "us-east-1e"
+  # availability_zone = "us-east-1f"
 
   tags = {
     Name = "dev-public-1"
