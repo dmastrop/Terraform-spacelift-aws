@@ -50,10 +50,10 @@ resource "aws_subnet" "mtc_public_subnet-1" {
   # that do not reside in the aws_region.  See main.tf as well.
   # availability_zone = "us-east-1a"
   #availability_zone = "us-east-1b"
-  availability_zone = "us-east-1c"
+  #availability_zone = "us-east-1c"
   # availability_zone = "us-east-1d"
   # availability_zone = "us-east-1e"
-  # availability_zone = "us-east-1f"
+  availability_zone = "us-east-1f"
 
   tags = {
     Name = "dev-public-1"
