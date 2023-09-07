@@ -1,7 +1,7 @@
 module "networking" {
   source = "./networking"
   # I need to add aws_availability_zone because I added that as a variable
-  # NOTE that the value of this variable is defined in the spacelift context as TF_VAR_aws_availability_zone
+  # NOTE that the value of this variable is defined in the spacelift context as TF_VAR_aws_availability_zone.
   aws_availability_zone = var.aws_availability_zone
 }
 
