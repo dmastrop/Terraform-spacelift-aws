@@ -9,7 +9,7 @@ module "networking" {
 module "compute" {
   source = "./compute"
   # need to pass in the security group id and subnet id so that i can access the 
-  # outputs of the networking module
+  # outputs of the networking module.
   # it can only access them through the output
   # the variables.tf in compute module (folder) will look for the definition of these in this root module
   #  and the root module will then fetch the values from output of the networking module.
