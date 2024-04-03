@@ -23,7 +23,7 @@ module "compute" {
 
   #the variables below are added for the changes to compute.tf for extensiblity for multiple aws instances
   # the compute variables.tf and the compute.tf have also been modified accordingly
-  # for now we will give the following static assignments.......................Test EDITS
+  # for now we will give the following static assignments EDITS......................Test EDITS
   node_name = "first-node"
   key_name = "first-key"
   instance_type = "t2.micro"
